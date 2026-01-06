@@ -1,0 +1,23 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@theme {
+  --background-image-blue: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
+  --background-image-gray: #99a1af;
+  --color-gray: #99a1af;
+  --color-blue: oklch(62.3% 0.214 259.815);
+}
+
+;
+
+@utility btn {
+  box-shadow: 0 10px 20px rgba(0, 97, 255, 0.3);
+}
+
+@utility glow {
+  box-shadow: 0 10px 20px rgba(0, 97, 255, 0.06);
+}
+
+;
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
