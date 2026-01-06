@@ -11,11 +11,15 @@
 ;
 
 @utility btn {
-  box-shadow: 0 10px 20px rgba(0, 97, 255, 0.3);
+  box-shadow: 0 10px 20px rgba(0, 97, 255, 0.2);
+}
+
+@utility no-scrollbar {
+  @apply [scrollbar-width:none]
 }
 
 @utility glow {
-  box-shadow: 0 10px 20px rgba(0, 97, 255, 0.06);
+  box-shadow: 0 10px 20px rgba(0, 97, 255, 0.09);
 }
 
 ;

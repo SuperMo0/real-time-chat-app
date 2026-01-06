@@ -1,0 +1,24 @@
+import React from 'react'
+import { useChatStore } from './../stores/chat.store'
+
+export default function FriendBubble({ message }) {
+    const { selectedFriend } = useChatStore();
+    return (
+        <div className="chat chat-start">
+            <div className="chat-image avatar">
+                <div className="w-10 rounded-full">
+                    <img
+                        alt="Tailwind CSS chat bubble component"
+                        src={selectedFriend.avatar}
+                    />
+                </div>
+            </div>
+            <div className="chat-header">
+                {selectedFriend.name}
+                <time className="text-xs opacity-50">{message.timestamp}</time>
+            </div>
+            <div className="chat-bubble bg-blue text-white max-w-1/2">{message.text}</div>
+        </div>
+
+    )
+}
