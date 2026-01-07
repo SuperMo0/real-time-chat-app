@@ -11,7 +11,7 @@
 ;
 
 @utility btn {
-  box-shadow: 0 10px 20px rgba(0, 97, 255, 0.2);
+  box-shadow: 0 10px 20px rgba(0, 97, 255, 0.05);
 }
 
 @utility no-scrollbar {
@@ -19,7 +19,7 @@
 }
 
 @utility glow {
-  box-shadow: 0 10px 20px rgba(0, 97, 255, 0.09);
+  box-shadow: 0 10px 20px rgba(0, 97, 255, 0.05);
 }
 
 ;

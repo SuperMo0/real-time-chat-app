@@ -17,7 +17,7 @@ export default function FriendBubble({ message }) {
                 {selectedFriend.name}
                 <time className="text-xs opacity-50">{message.timestamp}</time>
             </div>
-            <div className="chat-bubble bg-blue text-white max-w-1/2">{message.text}</div>
+            <div className="chat-bubble bg-blue text-white max-w-1/2">{message.content}</div>
         </div>
 
     )

@@ -4,24 +4,28 @@ import UserChatHeader from './UserChatHeader';
 import MeBubble from './MeBubble'
 import FriendBubble from './FriendBubble'
 import ChatInput from './ChatInput';
+import { useAuthStore } from '../stores/auth.store';
 
 
 export default function UserChat() {
 
-    const { getMessages, loading, selectedFriend, messages } = useChatStore();
+    const { getMessages, loading, selectedChat, messages } = useChatStore();
+    const { authUser } = useAuthStore();
 
     useEffect(() => {
         getMessages();
-    }, [selectedFriend])
+    }, [selectedChat])
+
+    if (!messages) return <p>Loading....</p>
 
     return (
-        <div className='h-full flex flex-col bg-base-100 py-2 pr-2 overflow-hidden'>
+        <div className='h-full flex flex-col bg-base-300 py-2 px-2 overflow-hidden rounded-2xl'>
             <UserChatHeader />
             <div className='overflow-y-scroll grow basis-0 no-scrollbar'>
                 {
                     messages.map((message) => (
-                        message.senderId == 'me' ? <MeBubble message={message} />
-                            : <FriendBubble message={message} />
+                        message.senderId == authUser.id ? <MeBubble key={message.id} message={message} />
+                            : <FriendBubble key={message.id} message={message} />
                     ))
                 }
             </div>

@@ -8,6 +8,8 @@ import Friends from '../components/Friends'
 export default function People() {
 
     const [tab, setTab] = useState('friends')
+    console.log(tab);
+
     return (
         <div className='flex flex-col gap-0.5 h-full bg-base-100'>
             <div className='flex flex-col border-b/20 border-b border-b-black/20'>

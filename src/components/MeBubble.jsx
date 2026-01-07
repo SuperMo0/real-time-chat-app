@@ -1,5 +1,5 @@
 import React from 'react'
-import { useAuthStore } from '../stores/auth.store';
+import { useAuthStore } from '../stores/auth.store.jsx';
 
 export default function MeBubble({ message }) {
 
@@ -18,7 +18,7 @@ export default function MeBubble({ message }) {
                 {authUser.name}
                 <time className="text-xs opacity-50">{message.timestamp}</time>
             </div>
-            <div className="chat-bubble bg-blue text-white max-w-1/2">{message.text}</div>
+            <div className="chat-bubble bg-blue text-white max-w-1/2">{message.content}</div>
             <div className="chat-footer opacity-50">Seen at 12:46</div>
         </div>
     )
