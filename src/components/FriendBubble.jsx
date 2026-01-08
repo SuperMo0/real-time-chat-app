@@ -1,5 +1,6 @@
 import React from 'react'
 import { useChatStore } from './../stores/chat.store'
+import { fixDate } from '../utils/utils.js';
 
 export default function FriendBubble({ message }) {
     const { selectedFriend } = useChatStore();
@@ -15,7 +16,7 @@ export default function FriendBubble({ message }) {
             </div>
             <div className="chat-header">
                 {selectedFriend.name}
-                <time className="text-xs opacity-50">{message.timestamp}</time>
+                <time className="text-xs opacity-50">{fixDate(message.timestamp)}</time>
             </div>
             <div className="chat-bubble bg-blue text-white max-w-1/2">{message.content}</div>
         </div>

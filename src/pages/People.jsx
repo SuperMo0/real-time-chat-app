@@ -1,14 +1,26 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import SearchInput from '../components/SearchInput'
 import { cn } from '../utils/utils'
 import { useState } from 'react'
 import AllPeople from '../components/AllPeople'
 import Friends from '../components/Friends'
-
+import { ClipLoader } from "react-spinners";
+import { useChatStore } from '../stores/chat.store'
 export default function People() {
 
     const [tab, setTab] = useState('friends')
-    console.log(tab);
+
+    const { getRequestsByUser, getRequestsToUser, requestsToUser, requestsByUser, getFriends, friends } = useChatStore();
+
+    useEffect(() => {
+        if (!requestsToUser) getRequestsToUser();
+        if (!requestsByUser) getRequestsByUser();
+        if (!friends) getFriends();
+    }, [])
+
+    if (!requestsByUser || !requestsToUser || !friends) return <div className='grid place-content-center h-full'>
+        <ClipLoader color='blue' loading={true} />
+    </div>
 
     return (
         <div className='flex flex-col gap-0.5 h-full bg-base-100'>

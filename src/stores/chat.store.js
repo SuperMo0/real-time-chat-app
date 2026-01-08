@@ -7,15 +7,25 @@ import { useAuthStore } from "./auth.store.jsx";
 
 export const useChatStore = create((set, get) => ({
 
+    isLoading: false,
+
     messages: null,
+
     friends: null,
+
     chats: null,
-    allPeople: null,
+
+    users: null,
+
     onlineUsers: null,
+
     selectedFriend: null,
+
     selectedChat: null,
-    loading: false,
-    pendingFriends: [],
+
+    requestsByUser: null,
+
+    requestsToUser: null,
 
     getFriends: async () => {
         try {
@@ -38,12 +48,10 @@ export const useChatStore = create((set, get) => ({
         }
     },
 
-    getAllPeople: () => {
-        set({ friends: FRIENDS });
-    },
-
-    setSelectedFriend: (selectedFriend) => {
-        set({ selectedFriend: selectedFriend });
+    getUsers: async () => {
+        const result = await api('/app/users');
+        const users = result.data.users
+        set({ users: users });
     },
 
     setSelectedChat: (selectedChat) => {
@@ -54,14 +62,52 @@ export const useChatStore = create((set, get) => ({
         set({ selectedFriend: friend });
     },
 
+
     getMessages: async () => {
         const { selectedChat } = get();
+
         let result = await api.get(`/app/chat/${selectedChat.id}/messages`);
+
         let messages = result.data.messages;
+
         set({ messages: messages });
     },
-    sendMessage: () => {
-        /* let { messages } = get()
-         set({ messages: [...messages, message] })*/
+
+
+
+    sendMessage: async (content) => {
+        try {
+            const { selectedChat } = get();
+
+            const result = await api.post(`app/message/${selectedChat.id}`, { content })
+
+            let newMessage = result.data.message;
+
+            set({ messages: [...get().messages, newMessage] });
+
+        } catch (error) {
+            toast.error("couldn't send message please try again");
+            throw error;
+        }
+
+    },
+
+    getRequestsByUser: async () => {
+        try {
+            const result = await api.get('/app/requests/by');
+            const requestsBy = result.data.requestsBy;
+            set({ requestsByUser: requestsBy });
+        } catch (error) {
+            console.log(error);
+
+
+        }
+
+    },
+
+    getRequestsToUser: async () => {
+        const result = await api.get('/app/requests/to');
+        const requestsTo = result.data.requestsTo;
+        set({ requestsToUser: requestsTo });
     }
 }))

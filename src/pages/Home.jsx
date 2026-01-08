@@ -1,9 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Outlet } from 'react-router'
 import Panel from '../components/Panel'
+import { useAuthStore } from '../stores/auth.store';
 
 export default function Home() {
 
+    const { disconnectSocket, connectSocket } = useAuthStore();
+
+    useEffect(() => {
+        let socket = connectSocket()
+        return () => socket.disconnect();
+    }, [])
 
     return (
         <div className="flex items-center justify-center h-screen bg-slate-200 ">

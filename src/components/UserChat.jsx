@@ -9,7 +9,7 @@ import { useAuthStore } from '../stores/auth.store';
 
 export default function UserChat() {
 
-    const { getMessages, loading, selectedChat, messages } = useChatStore();
+    const { getMessages, isLoading, selectedChat, messages } = useChatStore();
     const { authUser } = useAuthStore();
 
     useEffect(() => {

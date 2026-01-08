@@ -13,15 +13,20 @@ export default function ChatInput() {
 
     async function handleSendMessage(e) {
         e.preventDefault();
+
         let isTextEmpty = text.trim() === "";
+
         if (isTextEmpty) return;
 
         try {
-            await sendMessage();
+            await sendMessage(text);
+
             setText("");
+
             setImage(null);
         } catch (error) {
-            console.log("message wasn't sent");
+
+
         }
     }
 
