@@ -13,8 +13,6 @@ export const useAuthStore = create((set, get) => ({
 
     socket: null,
 
-
-
     check: async () => {
         set({ isChecking: true })
 
@@ -22,7 +20,7 @@ export const useAuthStore = create((set, get) => ({
             let res = await api.get('/auth/check');
             set({ authUser: res.data.user })
         } catch (error) {
-            console.log(error);
+
         }
         finally {
             set({ isChecking: false });

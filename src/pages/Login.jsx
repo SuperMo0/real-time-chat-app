@@ -1,20 +1,23 @@
 import React, { useState } from 'react'
-import { useAuthStore } from '../stores/auth.store.jsx';
+import { useAuthStore } from '../stores/auth.store.js';
+import { ClipLoader } from 'react-spinners';
 
 export default function Login() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { login } = useAuthStore();
-
+    const { login, isSigningIn } = useAuthStore();
 
     function handleFormSubmit(e) {
         e.preventDefault();
         login({ email, password });
-
     }
+
     return (
         <form action={'/'} onSubmit={handleFormSubmit} className='h-screen grid place-content-center' >
+            {isSigningIn && <div className='grid place-content-center h-full'>
+                <ClipLoader color='blue' loading={true} />
+            </div>}
             <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
                 <legend className="fieldset-legend">Login</legend>
                 <label className="label">Email</label>

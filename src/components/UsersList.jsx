@@ -22,7 +22,7 @@ export default function UsersList({ users, onAction }) {
                             <h2 className="card-title mt-auto">{user.name}</h2>
                             <div className="card-actions ">
                                 <button
-                                    onClick={() => { user.action(user) }}
+                                    onClick={() => { user.onAction(user) }}
                                     className={cn("text-white", "glow", "border-0", "btn", user.isActionDisabled ? "btn-disabled" : "bg-blue")}>
                                     {user.actionTitle}
                                 </button>

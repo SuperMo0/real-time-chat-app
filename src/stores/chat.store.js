@@ -2,7 +2,7 @@ import { create } from "zustand"
 import api from "../lib/axios.js";
 import { toast } from "react-toastify";
 import { getFriend } from "../utils/utils.js";
-import { useAuthStore } from "./auth.store.jsx";
+import { useAuthStore } from "./auth.store.js";
 import { io } from 'socket.io-client'
 import { message } from "../lib/fake.js";
 
@@ -76,8 +76,6 @@ export const useChatStore = create((set, get) => ({
         set({ messages: messages });
     },
 
-
-
     sendMessage: async (content) => {
         try {
             const { selectedChat } = get();
@@ -102,8 +100,46 @@ export const useChatStore = create((set, get) => ({
 
     getRequestsToUser: async () => {
         const result = await api.get('/app/requests/to');
+
         const requestsTo = result.data.requestsTo;
+
         set({ requestsToUser: requestsTo });
+    },
+
+    sendNewRequest: async (receiver) => {
+        try {
+            const result = await api.post(`/app/request/${receiver.id}`);
+
+            let request = result.data.request;
+
+            const { requestsByUser } = get();
+
+            set({ requestsByUser: [...requestsByUser, request] })
+
+        } catch (error) {
+            console.log(error);
+            toast.error('failure to send request try later');
+        }
+    },
+
+    acceptRequest: async (request) => {
+        try {
+            const result = await api.put(`/app/request/${request.id}`);
+
+            const { requestsToUser } = get();
+
+            let newRequestsToUser = requestsToUser.filter((r) => r.id != request.id);
+
+            set({ requestsToUser: newRequestsToUser })
+
+        } catch (error) {
+            console.log(error);
+            toast.error('failure accepting please try again later');
+        }
+    },
+
+    markMessageAsRead: async (message) => {
+        const result = await api.put(`app/message/${message.id}/seen`);
     },
 
     connectSocket: () => {
@@ -124,13 +160,11 @@ export const useChatStore = create((set, get) => ({
 
         socket.on("chatUpdate", (chat) => {
 
-            console.log(chat);
-
             const { chats } = get();
 
             const newChats = chats.filter((c) => c.id != chat.id);
 
-            if (get().selectedChat.id == chat.id) {
+            if (get().selectedChat?.id == chat.id) {
                 const messages = get().messages || [];          // we should have a state isGettingMessages to avoid race conditions
                 set({ messages: [...messages, chat.lastMessage] });
             }
@@ -145,6 +179,21 @@ export const useChatStore = create((set, get) => ({
         socket.on("requestsToUserUpdate", (request) => {
             const { requestsToUser } = get();
             set({ requestsToUser: [...requestsToUser, request] });
+        })
+
+        socket.on("messageUpdate", (message) => {
+            const { authUser } = useAuthStore.getState();
+
+            if (message.chatId != get().selectedChat.id) return;
+
+            const { messages } = get()
+
+            let newMessages = messages.map((m) => {
+                if (m.id == message.id) return message;
+                return m;
+            })
+
+            set({ messages: newMessages });
         })
 
         set({ socket: socket });

@@ -2,66 +2,78 @@ import React, { useEffect, useMemo, useState } from 'react'
 import UsersList from './UsersList'
 import { useChatStore } from '../stores/chat.store';
 import { ClipLoader } from "react-spinners";
+import { useAuthStore } from '../stores/auth.store';
 
 export default function AllPeople() {
 
-    const { users, getUsers, friends, requestsToUser, requestsByUser } = useChatStore();
+    const { users, getUsers, friends, requestsToUser, requestsByUser, sendNewRequest, acceptRequest } = useChatStore();
+    const { authUser } = useAuthStore();
 
     useEffect(() => {
         if (users) return;
         getUsers();
     }, [])
 
-    const usersDataCards = useMemo(() => {
+    const usersDataCards = useMemo(() => {  // in order not to write the UsersList component twice I ended up with more lines 
 
         if (!users) return
 
-        let filteredUsers = users.filter((u) => {
-            let isNotFriend = !friends.find((f) => f.id == u.id);
-            return isNotFriend;
-        })
-
         const pendingAccept = {};
+        const pendingSent = {};
+        const isFriend = {};
+
+        friends.forEach((f) => isFriend[f.id] = true);
+
+        let filteredUsers = users.filter((u) => !isFriend[u.id] && authUser.id != u.id)
+
         requestsToUser.forEach((r) => {
-            pendingAccept[r.senderId] = true;
+            pendingAccept[r.senderId] = r;
         })
 
-        const pendingSent = {};
         requestsByUser.forEach((r) => {
-            pendingSent[r.receiverId] = true;
+            pendingSent[r.receiverId] = r;
         })
 
         let usersDataCards = filteredUsers.map((u) => {
-
             if (pendingAccept[u.id]) {
-                u.action = handleAccept;
-                u.actionTitle = "Accept"
+                return {
+                    ...u,
+                    onAction: () => handleAccept(pendingAccept[u.id]),
+                    actionTitle: "Accept",
+                    variant: 'blue'
+                }
             }
             else if (pendingSent[u.id]) {
-                u.isActionDisabled = true;
-                u.action = () => { };
-                u.actionTitle = "Added"
+                return {
+                    ...u,
+                    onAction: () => { },
+                    actionTitle: "sent",
+                    variant: 'success'
+                }
             }
             else {
-                u.action = handleAdd;
-                u.actionTitle = "Add";
+                return {
+                    ...u,
+                    onAction: () => () => handleAdd(u),
+                    actionTitle: "Add",
+                }
             }
-            return u;
         })
 
         return usersDataCards;
 
 
-    }, [users])
-
+    }, [users, requestsByUser, requestsToUser, friends])
 
 
     function handleAdd(user) {
-        console.log('sending request to user');
+        sendNewRequest(user);
     }
 
-    function handleAccept(user) {
-        console.log('accepting user request');
+    function handleAccept(request) {
+        console.log('here');
+
+        acceptRequest(request)
     }
 
     if (!users) return <div className='grid place-content-center h-full'>

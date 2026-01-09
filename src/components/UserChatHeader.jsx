@@ -3,7 +3,7 @@ import { useChatStore } from './../stores/chat.store'
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import { getFriend } from '../utils/utils';
-import { useAuthStore } from '../stores/auth.store';
+import { useAuthStore } from '../stores/auth.store.js';
 import { cn } from '../utils/utils';
 
 

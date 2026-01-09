@@ -13,9 +13,15 @@ export function getFriend(userId, chat) {
     return chat.users[0].id != userId ? chat.users[0] : chat.users[1];
 }
 
-export function fixDate(timeStamp) {
+export function fixDate(timestamp) {
 
-    let date = new Date(timeStamp);
+    try {
+        let date = new Date(timestamp);
 
-    return format(date, 'd MMM, hh:mm a');
+        return format(date, 'd MMM, hh:mm a');
+
+    } catch (error) {
+        console.log(timestamp);
+    }
+
 }

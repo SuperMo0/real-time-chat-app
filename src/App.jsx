@@ -5,22 +5,26 @@ import { Routes, Route, Navigate } from 'react-router'
 import Chats from './pages/Chats.jsx'
 import Profile from './pages/Profile.jsx'
 import People from './pages/People.jsx'
-import { useAuthStore } from './stores/auth.store.jsx';
+import { useAuthStore } from './stores/auth.store.js';
 import Login from './pages/Login.jsx'
 import { ToastContainer } from 'react-toastify';
+import { ClipLoader } from 'react-spinners'
 
 
 
 
 function App() {
 
-  const { authUser, check } = useAuthStore();
+  const { authUser, check, isChecking } = useAuthStore();
 
   useEffect(() => {
     check();
   }, [])
 
-  if (!authUser) return <Navigate to={"/login"} />   // with this line Chats renders twice in strict mode
+
+  if (isChecking) return <div className='grid place-content-center h-full'>
+    <ClipLoader color='blue' loading={true} />
+  </div>
 
   return (
     <>

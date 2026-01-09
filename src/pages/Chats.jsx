@@ -3,7 +3,7 @@ import ChatsList from '../components/ChatsList'
 import UserChat from '../components/UserChat'
 import { useChatStore } from './../stores/chat.store'
 import { cn } from './../utils/utils.js'
-import { useAuthStore } from '../stores/auth.store.jsx'
+import { useAuthStore } from '../stores/auth.store.js'
 
 
 
@@ -11,13 +11,14 @@ export default function Chats() {
 
 
     const { getChats, selectedChat, chats, onlineUsers } = useChatStore();
-
     useEffect(() => {
+        if (chats) return;
         async function fn() {
             await getChats();
         }
         fn();
     }, [])
+
 
     if (!chats || !onlineUsers) return <p>loading...</p>
 
