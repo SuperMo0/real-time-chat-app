@@ -1,10 +1,6 @@
 import { create } from "zustand"
-import { CURRENT_USER, onlineUsers } from '../lib/fake.js'
 import api from '../lib/axios.js'
 import { toast } from 'react-toastify';
-import { io } from 'socket.io-client'
-
-let z = 0;
 
 
 export const useAuthStore = create((set, get) => ({
@@ -17,14 +13,13 @@ export const useAuthStore = create((set, get) => ({
 
     socket: null,
 
-    onlineUsers: null,
+
 
     check: async () => {
         set({ isChecking: true })
 
         try {
             let res = await api.get('/auth/check');
-
             set({ authUser: res.data.user })
         } catch (error) {
             console.log(error);
@@ -54,25 +49,6 @@ export const useAuthStore = create((set, get) => ({
 
     logout: () => {
         api
-    },
-
-    connectSocket: () => {
-
-        const { authUser } = get();
-
-        if (!authUser) return;
-
-        const socket = io("ws://localhost:3000", {
-            reconnectionDelayMax: 10000,
-        });
-
-        socket.on('onlineUsers', () => {
-            set({ onlineUsers: onlineUsers });
-        })
-
-        set({ socket: socket });
-
-        return socket;
     }
 }))
 

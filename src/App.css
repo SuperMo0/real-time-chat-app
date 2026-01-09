@@ -14,6 +14,13 @@
   box-shadow: 0 10px 20px rgba(0, 97, 255, 0.05);
 }
 
+@utility avatar-offline {
+  &::before {
+    background-color: silver;
+  }
+}
+
+
 @utility no-scrollbar {
   @apply [scrollbar-width:none]
 }

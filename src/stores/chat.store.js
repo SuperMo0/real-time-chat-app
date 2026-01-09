@@ -3,6 +3,9 @@ import api from "../lib/axios.js";
 import { toast } from "react-toastify";
 import { getFriend } from "../utils/utils.js";
 import { useAuthStore } from "./auth.store.jsx";
+import { io } from 'socket.io-client'
+import { message } from "../lib/fake.js";
+
 
 
 export const useChatStore = create((set, get) => ({
@@ -78,12 +81,7 @@ export const useChatStore = create((set, get) => ({
     sendMessage: async (content) => {
         try {
             const { selectedChat } = get();
-
             const result = await api.post(`app/message/${selectedChat.id}`, { content })
-
-            let newMessage = result.data.message;
-
-            set({ messages: [...get().messages, newMessage] });
 
         } catch (error) {
             toast.error("couldn't send message please try again");
@@ -99,15 +97,61 @@ export const useChatStore = create((set, get) => ({
             set({ requestsByUser: requestsBy });
         } catch (error) {
             console.log(error);
-
-
         }
-
     },
 
     getRequestsToUser: async () => {
         const result = await api.get('/app/requests/to');
         const requestsTo = result.data.requestsTo;
         set({ requestsToUser: requestsTo });
+    },
+
+    connectSocket: () => {
+
+        const { authUser } = useAuthStore.getState();
+
+        if (!authUser) return;
+
+
+        const socket = io("ws://localhost:3000", {
+            reconnectionDelayMax: 10000,
+            withCredentials: true,
+        });
+
+        socket.on('onlineUsers', (onlineUsers) => {
+            set({ onlineUsers: onlineUsers });
+        })
+
+        socket.on("chatUpdate", (chat) => {
+
+            console.log(chat);
+
+            const { chats } = get();
+
+            const newChats = chats.filter((c) => c.id != chat.id);
+
+            if (get().selectedChat.id == chat.id) {
+                const messages = get().messages || [];          // we should have a state isGettingMessages to avoid race conditions
+                set({ messages: [...messages, chat.lastMessage] });
+            }
+            set({ chats: [...newChats, chat] });
+        })
+
+        socket.on("friendsUpdate", (friend) => {
+            const { friends } = get();
+            set({ friends: [...friends, friend] });
+        })
+
+        socket.on("requestsToUserUpdate", (request) => {
+            const { requestsToUser } = get();
+            set({ requestsToUser: [...requestsToUser, request] });
+        })
+
+        set({ socket: socket });
+
+        return socket;
     }
+
+
+
 }))

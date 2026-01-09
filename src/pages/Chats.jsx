@@ -9,9 +9,17 @@ import { useAuthStore } from '../stores/auth.store.jsx'
 
 export default function Chats() {
 
-    const { selectedChat } = useChatStore();
 
-    const { authUser } = useAuthStore();
+    const { getChats, selectedChat, chats, onlineUsers } = useChatStore();
+
+    useEffect(() => {
+        async function fn() {
+            await getChats();
+        }
+        fn();
+    }, [])
+
+    if (!chats || !onlineUsers) return <p>loading...</p>
 
     return (
         <div className='md:grid

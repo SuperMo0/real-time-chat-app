@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import { Outlet } from 'react-router'
 import Panel from '../components/Panel'
-import { useAuthStore } from '../stores/auth.store';
+import { useChatStore } from '../stores/chat.store';
 
 export default function Home() {
 
-    const { disconnectSocket, connectSocket } = useAuthStore();
+    const { connectSocket } = useChatStore();
 
     useEffect(() => {
         let socket = connectSocket()
