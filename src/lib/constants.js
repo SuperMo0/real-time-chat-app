@@ -1,6 +1,5 @@
-import { RiChatSmile3Fill } from "react-icons/ri";
-import { MdPeopleAlt } from "react-icons/md";
-import { BiSolidUser } from "react-icons/bi";
+/*import { RiChatSmile3Fill } from "react-icons/ri";
+
 
 
 export const panelElements = [
@@ -19,4 +18,4 @@ export const panelElements = [
         title: "Profile",
         path: "/Profile"
     }
-]
+]*/

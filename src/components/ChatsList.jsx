@@ -3,6 +3,9 @@ import { useChatStore } from './../stores/chat.store'
 import { getFriend } from '../utils/utils';
 import { useAuthStore } from '../stores/auth.store.js';
 import { cn } from '../utils/utils';
+import Badge from '@mui/material/Badge';
+import MailIcon from '@mui/icons-material/Mail';
+
 
 export default function ChatsList() {
 
@@ -24,7 +27,7 @@ export default function ChatsList() {
     }, [chats])
 
     return (
-        <div className='bg-base-300 rounded-2xl px-2 py-1.5 
+        <div className='bg-slate-400/60 glass dark:bg-base-300 rounded-2xl px-2 py-1.5 
         flex flex-col gap-2 overflow-x-hidden overflow-y-auto
          no-scrollbar max-h-full h-full'>
             {shouldShowChats.map((chat) => {
@@ -43,7 +46,9 @@ export default function ChatsList() {
                         <p>{friend.name}</p>
                         <p className='text-base-content/50 whitespace-nowrap'>{chat.lastMessage.content}</p>
                     </div>
-                    {shouldShowBlueDot && <div className='w-8 h-8 rounded-full bg-blue ml-auto'></div>}
+                    {shouldShowBlueDot && <Badge className='ml-auto mr-2.5' color="primary" variant="dot">
+                        <MailIcon className='text-slate-500' />
+                    </Badge>}
                 </div>)
 
             })}

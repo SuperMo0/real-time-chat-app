@@ -10,7 +10,7 @@ export default function FriendBubble({ message }) {
             <div className="chat-image avatar">
                 <div className="w-10 rounded-full">
                     <img
-                        alt="Tailwind CSS chat bubble component"
+                        alt="friend avatar"
                         src={selectedFriend.avatar}
                     />
                 </div>

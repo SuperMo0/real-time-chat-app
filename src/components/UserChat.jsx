@@ -10,25 +10,25 @@ import { ClipLoader } from 'react-spinners';
 
 export default function UserChat() {
 
-    const { getMessages, isLoading, selectedChat, messages, markMessageAsRead } = useChatStore();
+    const { getMessages, isLoading, selectedChat, messages, markMessageAsRead, markChatAsRead } = useChatStore();
     const { authUser } = useAuthStore();
 
     useEffect(() => {
         getMessages();
-    }, [selectedChat])
+    }, [selectedChat.id])
 
     useEffect(() => {
+        if (!messages) return;
 
-        if (!selectedChat || !messages) return;
+        const lastMessage = selectedChat.lastMessage
+        if (!lastMessage) return;
 
-        for (let i = messages.length - 1; i >= 0; i--) {
-            let message = messages[i];
-            if (message.senderId == authUser.id || message.isRead) break;
-            markMessageAsRead(message);
-            break;
-        }
+        let hasUnread = (lastMessage.senderId != authUser.id) && (!lastMessage.isRead) // we should be checking all message probably this will cause weird bugs 
 
-    }, [messages])
+        if (hasUnread)
+            markChatAsRead(selectedChat);
+
+    }, [selectedChat.id, messages])
 
     if (!messages) return <div className='grid place-content-center h-full'>
         <ClipLoader color='blue' loading={true} />
@@ -36,7 +36,7 @@ export default function UserChat() {
 
 
     return (
-        <div className='h-full flex flex-col bg-base-300 py-2 px-2 overflow-hidden rounded-2xl'>
+        <div className='h-full flex flex-col bg-slate-400/60 glass dark:bg-base-300 py-2 px-2 overflow-hidden rounded-2xl'>
             <UserChatHeader />
             <div className='overflow-y-scroll grow basis-0 no-scrollbar'>
                 {

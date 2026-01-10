@@ -8,10 +8,12 @@ export default function Friends() {
     const { friends, setSelectedChat, chats } = useChatStore();
     let navigate = useNavigate();
 
-    let frienddDataCards = [...friends];
-    frienddDataCards.forEach((u) => {
-        u.actionTitle = "Chat";
-        u.onAction = handleChat;
+    const friendsDataCards = friends.map((u) => {
+        return {
+            ...u,
+            actionTitle: "Chat",
+            onAction: handleChat
+        }
     })
 
     function handleChat(friend) {
@@ -23,6 +25,6 @@ export default function Friends() {
     }
 
     return (
-        friends && <UsersList users={frienddDataCards}></UsersList>
+        friends && <UsersList users={friendsDataCards}></UsersList>
     )
 }

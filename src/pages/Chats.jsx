@@ -3,24 +3,11 @@ import ChatsList from '../components/ChatsList'
 import UserChat from '../components/UserChat'
 import { useChatStore } from './../stores/chat.store'
 import { cn } from './../utils/utils.js'
-import { useAuthStore } from '../stores/auth.store.js'
-
-
 
 export default function Chats() {
 
 
-    const { getChats, selectedChat, chats, onlineUsers } = useChatStore();
-    useEffect(() => {
-        if (chats) return;
-        async function fn() {
-            await getChats();
-        }
-        fn();
-    }, [])
-
-
-    if (!chats || !onlineUsers) return <p>loading...</p>
+    const { selectedChat } = useChatStore();
 
     return (
         <div className='md:grid
@@ -32,9 +19,14 @@ export default function Chats() {
                 <ChatsList />
             </div>
             <div className={cn("hidden", selectedChat && "block", "md:block", "h-full", "overflow-hidden")}>
-                {selectedChat && <UserChat />}
+                {selectedChat ? <UserChat /> :
+                    <div className='text-center' >
+                        <img src="logo.png" className='w-full' alt="" />
+                        <h1 className='text-8xl text-blue font-extrabold'>Chat</h1>
+                        <p className='text-3xl text-base-content/70'>Connect freely</p>
+                        <p className='text-base-content/50'>pick some chat to start chatting</p>
+                    </div>}
             </div>
-
         </div>
     )
 

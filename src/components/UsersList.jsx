@@ -8,7 +8,7 @@ export default function UsersList({ users, onAction }) {
 
     return (
         <div className='grid gap-x-4 grid-cols-[repeat(auto-fit,140px)]
-        overflow-y-auto gap-y-2 justify-center'>
+        overflow-y-auto gap-y-2 px-3'>
             {
                 users.map((user) => (
                     <div key={user.id} className="card bg-slate-300 dark:bg-black glass w-35 shadow-sm rounded-2xl">

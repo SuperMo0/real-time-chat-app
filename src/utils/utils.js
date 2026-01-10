@@ -10,6 +10,7 @@ export function cn(...inputs) {
 
 export function getFriend(userId, chat) {
     if (chat == null) return null;
+
     return chat.users[0].id != userId ? chat.users[0] : chat.users[1];
 }
 

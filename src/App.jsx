@@ -21,7 +21,6 @@ function App() {
     check();
   }, [])
 
-
   if (isChecking) return <div className='grid place-content-center h-full'>
     <ClipLoader color='blue' loading={true} />
   </div>

@@ -54,7 +54,7 @@ export default function AllPeople() {
             else {
                 return {
                     ...u,
-                    onAction: () => () => handleAdd(u),
+                    onAction: () => handleAdd(u),
                     actionTitle: "Add",
                 }
             }
